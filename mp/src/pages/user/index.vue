@@ -8,25 +8,24 @@
 
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
+import { getCurrentUser } from '../../services';
 
 const user = ref();
 
-onMounted(() => {
-    interface IUserResponse {
-        id: string;
-        name: string;
-        resume_url: string;
-    }
-
-    uni.request({
-        url: "https://mock.apifox.cn/m1/650713-0-default/user/current",
-        success: ({ data }) => {
-            const userinfo = data as IUserResponse;
-            if (userinfo.id) {
-                uni.setStorageSync('userinfo', userinfo);
-                user.value = userinfo;
+onMounted(async () => {
+    uni.getStorage({
+        key: 'userinfo',
+        success: (res: any) => {
+            if (res.data) {
+                user.value = res.data;
             }
         }
     })
+
+    const userinfo = await getCurrentUser();
+    if (userinfo.id) {
+        uni.setStorageSync('userinfo', userinfo);
+        user.value = userinfo;
+    }
 })
 </script>

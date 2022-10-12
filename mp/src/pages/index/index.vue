@@ -1,73 +1,24 @@
 <template>
   <view class="content">
-    <view class="personList">
-      <person-item v-for="item in userList" :key="item.id" :user="item" />
+    <view class="jobList">
+      <job-item v-for="item in jobs" :key="item.id" :job="item" />
     </view>
   </view>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
-import PersonItem from '../../components/PersonItem.vue';
+import { onMounted, reactive, ref } from 'vue'
+import JobItem from '../../components/JobItem.vue';
+import { getJobs } from '../../services';
 
-const data = [{
-  id: 1,
-  tags: ['React', 'Redux', 'Webpack'],
-  job: 'Frontend Developer',
-  offer: '20-30K',
-  company: {
-    name:  '往前冲',
-    peopleCount: '20-99人',
-  },
-  poster: {
-    name: '王先生'
-  },
-  address: '上海市长宁区汶水路'
-},{
-  id: 2,
-  tags: ['React', 'Rematch', 'Vite'],
-  job: '前端开发工程师',
-  offer: '15-30K',
-  company: {
-    name:  '往前冲',
-    peopleCount: '20-99人',
-  },
-  poster: {
-    name: '王先生'
-  },
-  address: '上海市青浦区盈港东路'
-},{
-  id: 3,
-  tags: ['React', 'Rematch', 'Vite'],
-  job: '前端开发工程师',
-  offer: '30-60K',
-  company: {
-    name:  'LEGO Group',
-    peopleCount: '200-999人',
-  },
-  poster: {
-    name: 'Mrs. Li'
-  },
-  address: '上海市黄浦区'
-},{
-  id: 4,
-  tags: ['React', 'Rematch', 'Vite'],
-  job: '前端开发工程师',
-  offer: '15-30K',
-  company: {
-    name:  'LSDSG',
-    peopleCount: '20-99人',
-  },
-  poster: {
-    name: 'Mr. Willian'
-  },
-  address: '上海市浦东陆家嘴'
-}]
-const userList = ref(data)
+const jobs = ref()
+const params = reactive({ limit: 20, offset: 0 })
 
-uni.setStorage({
-  key: 'jobList',
-  data: data
+onMounted(async () => {
+  const resp = await getJobs(params.limit, params.offset);
+  if (resp.length > 0) {
+    jobs.value = resp;
+  }
 })
 </script>
 
@@ -76,7 +27,7 @@ uni.setStorage({
   padding: 20rpx $uni-spacing-row-base;
 }
 
-.personList {
+.jobList {
   display: flex;
   gap: 15rpx;
   flex-direction: column;

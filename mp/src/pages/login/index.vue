@@ -20,29 +20,21 @@
     </view>
 </template>
 <script setup lang="ts">
+import { login } from '../../services';
 
-interface ILoginResponse {
-    token: string;
-}
-
-const handleSubmit = (e: any) => {
+const handleSubmit = async (e: any) => {
     const values = e.detail.value;
     if (!values.username || !values.password) {
         return
     }
     
-    uni.request({
-        url: 'https://mock.apifox.cn/m1/650713-0-default/login',
-        success: ({ data }) => {
-            const { token } = data as ILoginResponse;
-            if (token) {
-                uni.setStorageSync('token', token);
-                uni.redirectTo({
-                    url: '/pages/index/index'
-                })
-            }
-        }
-    })
+    const data = await login(values);
+    if (data.token) {
+        uni.setStorageSync('token', data.token);
+        uni.redirectTo({
+            url: '/pages/index/index'
+        })
+    }
 }
 </script>
 

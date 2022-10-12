@@ -1,34 +1,42 @@
 <template>
-    <view class="personItem" @click="handleViewDetail">
+    <view class="jobItem" @click="handleViewDetail">
         <view class="title">
-            <text class="job">{{user.job}}</text>
-            <text class="offer">{{user.offer}}</text>
+            <text class="name">{{job.title}}</text>
+            <text class="offer">{{turnMoney(job.salary_min)}} - {{turnMoney(job.salary_max)}}K</text>
         </view>
         <view class="companyInfo">
-            <text>{{user.company.name}}</text><text>{{user.company.peopleCount}}</text>
+            <text>{{job.company}}</text>
         </view>
-        <view class="tags">
+        <!-- <view class="tags">
             <tag v-for="tag in user.tags" :text="tag" :key="tag" />
-        </view>
-        <view class="poster">
+        </view> -->
+        <!-- <view class="poster">
             <text>{{user.poster.name}}</text>
             <text>{{user.address}}</text>
-        </view>
+        </view> -->
     </view>
 </template>
 <script setup lang="ts">
 import Tag from './Tag.vue'
 import { defineProps } from 'vue';
+import type { IJob } from '../services'
 
-const { user } = defineProps(['user'])
+interface IProps {
+    job: IJob
+}
+const { job } = defineProps<IProps>()
 
 const handleViewDetail = () => {
-    uni.navigateTo({ url: '../job/index?id=' + user.id })
+    uni.navigateTo({ url: '../job/index?id=' + job.id })
+}
+
+const turnMoney = (money: number) => {
+    return (money / 1000).toFixed()
 }
 
 </script>
 <style lang="scss" scoped>
-.personItem {
+.jobItem {
     background-color: #FFF;
     padding: 15rpx 20rpx;
     border-radius: 10rpx;
@@ -43,11 +51,12 @@ const handleViewDetail = () => {
     align-items: center;
     justify-content: space-between;
 
-    .job {
+    .name {
         max-width: 60%;
         overflow: hidden;
         text-overflow: ellipsis;
         font-weight: bold;
+        white-space: nowrap;
     }
 
     .offer {
