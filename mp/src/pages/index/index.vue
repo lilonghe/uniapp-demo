@@ -1,8 +1,6 @@
 <template>
   <view class="content">
-    <view v-if="loading && !jobs" class="loading">
-      <text>Loading...</text>
-    </view>
+    <Loading v-if="loading && !jobs" />
     <view class="jobList">
       <job-item v-for="item in jobs" :key="item.id" :job="item" />
     </view>
@@ -14,6 +12,7 @@ import { onReachBottom } from '@dcloudio/uni-app';
 import { onMounted, reactive, ref, watch } from 'vue'
 import JobItem from '../../components/JobItem.vue';
 import { getJobs } from '../../services';
+import Loading from '../../components/Loading.vue'
 
 const jobs = ref()
 const params = reactive({ limit: 20, offset: 0 })

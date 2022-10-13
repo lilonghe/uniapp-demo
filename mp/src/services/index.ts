@@ -15,6 +15,7 @@ export interface IJob {
     create_time: string;
     headcount: number;
     id: string;
+    jd: string;
     office_address: string;
     remote_type: number;
     salary_max: number;
@@ -23,12 +24,17 @@ export interface IJob {
     title: string;
     user_id: string;
     work_time: string;
+    applied: boolean;
 }
 
 export interface IGetCurrentUserResponse {
     id: string;
     name: string;
     resume_url: string;
+}
+
+export interface ISuccessResponse {
+    success: boolean;
 }
 
 export function login(params: ILoginRequest) {
@@ -41,4 +47,12 @@ export function getCurrentUser() {
 
 export function getJobs(offset: number, limit: number) {
     return req<IJob[]>('/jobs', { data: { offset, limit } })
+}
+
+export function getJobInfo(id: string) {
+    return req<IJob>('/jobs/' + id)
+}
+
+export function applyJob(jobId: string) {
+    return req<ISuccessResponse>(`/jobs/${jobId}/apply`)
 }
