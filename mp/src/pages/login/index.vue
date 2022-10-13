@@ -25,16 +25,18 @@ import { login } from '../../services';
 const handleSubmit = async (e: any) => {
     const values = e.detail.value;
     if (!values.username || !values.password) {
+        uni.showToast({ title: 'Please input username or password', icon: 'none' })
         return
     }
-    
+    uni.showLoading({ title: 'loading...' })
     const data = await login(values);
     if (data.token) {
         uni.setStorageSync('token', data.token);
-        uni.redirectTo({
+        uni.reLaunch({
             url: '/pages/index/index'
         })
     }
+    uni.hideLoading()
 }
 </script>
 

@@ -15,6 +15,7 @@ onLaunch(() => {
 <style>
 page {
   background-color: #fcfcfc;
+  font-size: 20px;
 }
 
 .content {
@@ -23,7 +24,7 @@ page {
 
 .input {
   border: 1px solid #CCC;
-  border-radius: 2px;
-  padding: 4px;
+  border-radius: 4px;
+  padding: 8px;
 }
 </style>

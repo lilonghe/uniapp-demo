@@ -1,5 +1,5 @@
 <template>
-  <Loading v-if="loading" />
+  <Loading v-if="loading && !job" />
   <view class="content" v-if="job">
     <view class="jobMeta">
       <view class="title">
@@ -24,7 +24,7 @@
     </view>
 
     <view class="actions">
-      <button :disabled="job.applied" @click="handleApply">{{job.applied ? 'Applied' : 'Apply'}}</button>
+      <button :disabled="job.applied || loading" @click="handleApply">{{job.applied ? 'Applied' : 'Apply'}}</button>
     </view>
   </view>
 </template>
@@ -60,9 +60,14 @@ onLoad((option) => {
 
 const handleApply = async () => {
   if (!job.value) return
+  uni.showLoading({ title: 'loading...' })
   const data = await applyJob(job.value.id);
+  uni.hideLoading();
   if (data.success) {
     uni.showToast({ title: 'Apply success' });
+    loadData(job.value.id);
+  } else {
+    uni.showToast({ title: 'Apply fail' });
     loadData(job.value.id);
   }
 }
@@ -125,7 +130,7 @@ $block-padding: 30rpx 0;
 
 .actions {
   position: absolute;
-  bottom: 10px;
+  bottom: 40rpx;
   width: calc(100vw - 30rpx * 2);
 }
 </style>
