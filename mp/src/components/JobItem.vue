@@ -4,22 +4,20 @@
             <text class="name">{{job.title}}</text>
             <text class="offer">{{turnMoney(job.salary_min)}} - {{turnMoney(job.salary_max)}}K</text>
         </view>
+        <view>
+            <text class="timeAgo">{{timeAgo(job.create_time)}}</text>
+        </view>
         <view class="companyInfo">
             <text>{{job.company}}</text>
+            <text class="remoteType">{{REMOTE_TYPE[job.remote_type]}}</text>
         </view>
-        <!-- <view class="tags">
-            <tag v-for="tag in user.tags" :text="tag" :key="tag" />
-        </view> -->
-        <!-- <view class="poster">
-            <text>{{user.poster.name}}</text>
-            <text>{{user.address}}</text>
-        </view> -->
     </view>
 </template>
 <script setup lang="ts">
-import Tag from './Tag.vue'
 import { defineProps } from 'vue';
 import type { IJob } from '../services'
+import { REMOTE_TYPE } from '../utils/constant'
+import { timeAgo } from '../utils'
 
 interface IProps {
     job: IJob
@@ -64,21 +62,19 @@ const turnMoney = (money: number) => {
     }
 }
 
+.timeAgo {
+    font-size: .8em;
+    color: #CCC;
+}
+
 .companyInfo {
     display: flex;
     gap: 8rpx;
     font-size: 12px;
-}
-
-.tags {
-    display: flex;
-    gap: 8rpx;
-}
-
-.poster {
-    display: flex;
-    justify-content: space-between;
     align-items: center;
-    font-size: 14px;
+}
+
+.remoteType {
+    margin-left: auto;
 }
 </style>
